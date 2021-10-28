@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script type="text/javascript" src="./js/vue.js"></script>
+    <title>Document</title>
+</head>
+
+    <div id="root">
+        <span>今天天气{{message}}</span><br><br>
+        <button @click="changeWeather">天气切换</button><br><br>
+    </div>
+
+    <!-- 列表模糊搜索 -->
+    <template></template> <!-- template只能包含一个根元素，不能同时出现<div></div> <div></div>这种情况 -->
+    <div id="tableList">
+        <h3>人员信息</h3>
+        <input type="text" v-model="searchParam" placeholder="请输入人员名称">
+        <ul>
+            <li v-for="list in computendList" :key="list.id">
+                {{list.name}} - {{list.age}} - {{list.sex}}
+            </li>
+        </ul>
+    </div>
+    
+<body>
+    <script type="text/javascript">
+        Vue.config.productionTip = false;
+        const vm = new Vue({
+            el: '#tableList',
+            data:{
+                searchParam:"",
+                tableList:[
+                    {id:1,name:"张三",age:18,sex:"男"},
+                    {id:2,name:"李三",age:19,sex:"男"},
+                    {id:3,name:"张四",age:20,sex:"女"},
+                    {id:4,name:"王四",age:21,sex:"女"}
+                ],
+                resultList:[]
+            },
+            //计算属性写法
+            computed:{
+                computendList(){
+                    return this.tableList.filter((obj)=>{
+                        return obj.name.indexOf(this.searchParam) > -1   
+                    })
+                }
+            }
+            //监视写法
+            // watch:{
+            //     searchParam:{
+            //         immediate:true,
+            //         handler(value){
+            //             console.log("searchParam值已改变");
+            //             this.resultList = this.tableList.filter((obj)=>{
+            //                 return obj.name.indexOf(value) > -1;
+            //             })
+            //         }
+            //     }
+            // }
+        });
+
+        new Vue({
+            el:"#root",
+            data:{
+                isHot:true,
+                message:'炎热'
+            },
+            methods: {
+                changeWeather(){
+                    this.isHot = !this.isHot;
+                }
+            },
+            computed: {
+                info(){
+                    return this.isHot ? "炎热" : "凉爽";
+                }
+            },
+            watch:{
+                //简单写法
+                // isHot(){
+                //     this.message = this.isHot ? "炎热" : "凉爽";
+                // }
+                isHot:{
+                    immediate:true, //初始化时让handler调用一下
+					deep:true,//深度监视
+                    handler(){
+                        this.message = this.isHot ? "炎热" : "凉爽";
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+</html>

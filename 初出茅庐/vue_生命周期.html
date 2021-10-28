@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script type="text/javascript" src="./js/vue.js"></script>
+    <title>Document</title>
+</head>
+
+    <div id="root">
+        <h2 :style="{opacity}">老板来玩啊！！</h2>
+        <span>n的值是：{{n}}</span><br><br>
+        <button @click="changeNum">点击n+1</button><br><br>
+        <button @click="destroy">点击销毁</button>
+    </div>
+    
+<body>
+    <script type="text/javascript">
+        Vue.config.productionTip = false;
+        const vm = new Vue({
+            el: '#root',
+            data:{
+                n:1,
+                opacity:1
+            },
+            methods: {
+                changeNum(){
+                    console.log("changeNum");
+                    return this.n++;
+                },
+                destroy(){
+                    this.$destroy();
+                }
+            },
+            beforeCreate() {
+                console.log("beforeCreate");
+            },
+            created () {
+                console.log("created");
+                setInterval(()=>{
+                    this.opacity -= 0.01;
+                    if(this.opacity <= 0) this.opacity=1;
+                },16)
+            },
+            beforeMount () {
+                console.log("beforeMount");
+            },
+            mounted () {
+                console.log("mounted");
+            },
+            beforeUpdate() {
+                //console.log("beforeUpdate");
+            },
+            updated () {
+                //console.log("updated");
+            },
+            beforeDestroy () {
+                console.log("beforeDestroy");
+            },
+            destroyed () {
+                console.log("destroyed");
+            }
+        });
+    </script>
+</body>
+</html>
